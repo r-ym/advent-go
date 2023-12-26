@@ -2,13 +2,41 @@ package util
 
 import (
 	"bufio"
-	"fmt"
 	"net/http"
+	"os"
 )
 
 func ReadURL(url string) ([]string, error) {
-	// Make an HTTP GET request to the specified URL
-	response, err := http.Get(url)
+	// Read the session token from .session file
+	file, err := os.Open("../.session")
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	session_file := bufio.NewScanner(file)
+	session_file.Scan()
+	session := session_file.Text()
+	if err := session_file.Err(); err != nil {
+		return nil, err
+	}
+	
+
+	// Create an HTTP client
+	client := &http.Client{}
+	// Create an HTTP GET request
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	// Add session cookie to request
+	
+	cookie := &http.Cookie{Name: "session", Value: session}
+	req.AddCookie(cookie)
+
+
+	// Make the HTTP request
+	response, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -17,10 +45,10 @@ func ReadURL(url string) ([]string, error) {
 	var inputArray []string
 	// Read the response body line by line and push to array
 	scanner := bufio.NewScanner(response.Body)
+
 	for scanner.Scan() {
 		inputArray = append(inputArray, scanner.Text())
 	}
-	fmt.Println(inputArray)
 
 	// Check for errors during scanning
 	if err := scanner.Err(); err != nil {
