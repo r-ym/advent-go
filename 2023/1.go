@@ -46,27 +46,26 @@ var int_str = map[string]int{
 	"seven": 7,
 	"eight": 8,
 	"nine":  9,
-	"1": 1,
-	"2": 2,
-	"3": 3,
-	"4": 4,
-	"5": 5,
-	"6": 6,
-	"7": 7,
-	"8": 8,
-	"9": 9,
+	"1":     1,
+	"2":     2,
+	"3":     3,
+	"4":     4,
+	"5":     5,
+	"6":     6,
+	"7":     7,
+	"8":     8,
+	"9":     9,
 }
 
 func part2(input []string) {
 
 	running_total := 0
 	for _, line := range input {
-		
-		val1:= get_first_digit(line)
-		val2:= get_last_digit(line)
-		
-		running_total += val1*10 + val2
 
+		val1 := get_first_digit(line)
+		val2 := get_last_digit(line)
+
+		running_total += val1*10 + val2
 
 	}
 	fmt.Println(running_total)
